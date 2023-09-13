@@ -123,6 +123,12 @@ static HandlerResult CategoriesPanel_eventHandler(Panel* super, int ch) {
 
    int selected = Panel_getSelectedIndex(super);
    switch (ch) {
+      case 'h': ch = KEY_LEFT; break;
+      case 'j': ch = KEY_DOWN; break;
+      case 'k': ch = KEY_UP; break;
+      case 'l': ch = KEY_RIGHT; break;
+   }
+   switch (ch) {
       case EVENT_SET_SELECTED:
          result = HANDLED;
          break;

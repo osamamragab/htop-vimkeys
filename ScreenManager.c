@@ -16,7 +16,7 @@ in the source distribution for its full text.
 
 #include "CRT.h"
 #include "FunctionBar.h"
-#include "Machine.h"
+#include "MainPanel.h"
 #include "Macros.h"
 #include "Object.h"
 #include "Platform.h"
@@ -318,14 +318,16 @@ void ScreenManager_run(ScreenManager* this, Panel** lastFocus, int* lastKey, con
          redraw = false;
          continue;
       }
-      switch (ch) {
-         case KEY_ALT('H'): ch = KEY_LEFT; break;
-         case KEY_ALT('J'): ch = KEY_DOWN; break;
-         case KEY_ALT('K'): ch = KEY_UP; break;
-         case KEY_ALT('L'): ch = KEY_RIGHT; break;
-      }
       redraw = true;
       if (Panel_eventHandlerFn(panelFocus)) {
+         if (Panel_eventHandlerFn(panelFocus) != MainPanel_eventHandler) {
+            switch (ch) {
+               case 'h': case KEY_ALT('H'): ch = KEY_LEFT; break;
+               case 'j': case KEY_ALT('J'): ch = KEY_DOWN; break;
+               case 'k': case KEY_ALT('K'): ch = KEY_UP; break;
+               case 'l': case KEY_ALT('L'): ch = KEY_RIGHT; break;
+            }
+         }
          result = Panel_eventHandler(panelFocus, ch);
       }
       if (result & SYNTH_KEY) {
@@ -359,7 +361,7 @@ void ScreenManager_run(ScreenManager* this, Panel** lastFocus, int* lastKey, con
          continue;
       }
       case KEY_LEFT:
-      case KEY_CTRL('B'):
+      case 'h':
          if (this->panelCount < 2) {
             goto defaultHandler;
          }
@@ -380,7 +382,7 @@ tryLeft:
 
          break;
       case KEY_RIGHT:
-      case KEY_CTRL('F'):
+      case 'l':
       case 9:
          if (this->panelCount < 2) {
             goto defaultHandler;
